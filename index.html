@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarePulse - Gestion pour Kiné, Orthophonie & Rééducation par séances</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #000080;
+            --secondary: #0072FF;
+            --accent: #00C6FF;
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.85);
+            --text: #0f172a;
+            --light-text: #64748b;
+            --glass: rgba(255, 255, 255, 0.75);
+            --border: rgba(255, 255, 255, 0.4);
+            --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 40px -10px rgb(0 0 0 / 0.15);
+            --shadow-glow: 0 10px 30px rgba(0, 114, 255, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg);
+            color: var(--text); 
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Glassmorphism */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1200px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        .nav-logo img { width: 40px; height: 40px; border-radius: 12px; }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.95rem; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--secondary); }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white !important;
+            padding: 12px 28px;
+            border-radius: 100px;
+            font-weight: 700;
+            box-shadow: var(--shadow-glow);
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 114, 255, 0.4);
+        }
+
+        /* --- BOUTONS FLOTTANTS (DOWNLOAD FABS) --- */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2000;
+        }
+
+        .fab-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .fab-btn i { font-size: 24px; }
+
+        .fab-windows { background: linear-gradient(135deg, #00a4ef, #0072FF); }
+        .fab-android { background: linear-gradient(135deg, #a4c639, #38ef7d); }
+
+        .fab-label {
+            position: absolute;
+            right: 80px;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            transform: translateX(10px);
+        }
+
+        .fab-btn:hover { transform: scale(1.1) translateY(-5px); }
+        .fab-btn:hover .fab-label { opacity: 1; transform: translateX(0); }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding: 160px 20px 80px;
+            display: flex;
+            align-items: center;
+            background: radial-gradient(circle at top right, rgba(0, 198, 255, 0.1), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(0, 114, 255, 0.1), transparent 50%);
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--primary);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-text p { font-size: 1.2rem; color: var(--light-text); margin-bottom: 35px; }
+        
+        .hero-image img {
+            width: 100%;
+            border-radius: 32px;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.5s ease;
+        }
+        .hero-image:hover img { transform: translateY(-10px); }
+
+        /* Section Spécialisée */
+        .specialization {
+            background: white;
+            padding: 60px 30px;
+            border-radius: 40px;
+            margin: 0 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .specialization h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .spec-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .spec-tag {
+            padding: 12px 25px;
+            background: var(--bg);
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--primary);
+            border: 1px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Features */
+        .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.8rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .section-header p { font-size: 1.2rem; color: var(--light-text); max-width: 700px; margin: 15px auto 0; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+        .feature-icon {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-glow);
+        }
+        .feature-card h4 { font-size: 1.4rem; color: var(--primary); margin-bottom: 15px; font-weight: 800; }
+        .feature-card p { color: var(--light-text); font-size: 0.95rem; }
+
+        /* Showcase */
+        .showcase-grid { display: grid; grid-template-columns: 1fr; gap: 60px; }
+        .showcase-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+        .showcase-item.reverse { direction: rtl; }
+        .showcase-item.reverse > * { direction: ltr; }
+        .showcase-img img { width: 100%; border-radius: 24px; box-shadow: var(--shadow-lg); transition: 0.3s; }
+        .showcase-img img:hover { transform: scale(1.02); }
+        
+        .showcase-content h3 { font-size: 2rem; color: var(--primary); font-weight: 800; margin-bottom: 20px; }
+        .showcase-content p { color: var(--light-text); font-size: 1.1rem; margin-bottom: 20px; }
+
+        /* Footer */
+        footer { background: white; padding: 80px 20px 40px; border-top: 1px solid #e2e8f0; }
+        .footer-content {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+        }
+        .footer-brand h2 { color: var(--primary); font-weight: 900; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .footer-brand img { width: 30px; border-radius: 8px; }
+        .footer-links h4 { color: var(--text); font-weight: 800; margin-bottom: 20px; }
+        .footer-links ul { list-style: none; }
+        .footer-links ul li { margin-bottom: 12px; }
+        .footer-links ul li a { text-decoration: none; color: var(--light-text); font-weight: 500; transition: color 0.3s; }
+        .footer-links ul li a:hover { color: var(--secondary); }
+        .footer-bottom { text-align: center; padding-top: 30px; color: var(--light-text); font-size: 0.9rem; border-top: 1px solid #f1f5f9; margin-top: 40px;}
+
+        @media (max-width: 968px) {
+            .hero-container, .showcase-item, .showcase-item.reverse { grid-template-columns: 1fr; text-align: center; direction: ltr; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-brand h2 { justify-content: center; }
+            .fab-container { bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fab-container">
+        <a href="https://github.com/SastoukaDigital/CarePulse/releases/latest/download/CarePulse-Windows.exe" class="fab-btn fab-windows" title="Télécharger pour Windows">
+            <span class="fab-label">Télécharger pour Windows</span>
+            <i class="fa-brands fa-windows"></i>
+        </a>
+        <a href="https://github.com/SastoukaDigital/CarePulse/releases/latest/download/CarePulse-Android.apk" class="fab-btn fab-android" title="Télécharger pour Android">
+            <span class="fab-label">Télécharger pour Android</span>
+            <i class="fa-brands fa-android"></i>
+        </a>
+    </div>
+
+    <nav>
+        <a href="#" class="nav-logo">
+            <img src="icon.png" alt="CarePulse" onerror="this.style.display='none'">
+            CarePulse
+        </a>
+        <div class="nav-links">
+            <a href="#specialite">Votre Spécialité</a>
+            <a href="#fonctionnalites">Fonctionnalités</a>
+            <a href="guide.html">Guide</a>
+            <a href="https://wa.me/212652084735" class="btn-primary">Obtenir la licence</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>L'excellence du suivi <span>par séances.</span></h1>
+                <p>La solution logicielle sur-mesure pour les centres de rééducation. Gérez vos patients, vos forfaits de séances et votre facturation avec une précision inégalée.</p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">
+                    <a href="https://wa.me/212652084735" class="btn-primary" style="font-size: 1.1rem; padding: 16px 35px;"><i class="fa-solid fa-rocket" style="margin-right: 8px;"></i> Démarrer maintenant</a>
+                    <a href="guide.html" class="btn-primary" style="background: white; color: var(--primary) !important; border: 2px solid #e2e8f0; box-shadow: none;">Voir le guide</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="img4.png" alt="Interface CarePulse">
+            </div>
+        </div>
+    </section>
+
+    <section id="specialite" class="specialization">
+        <h2>Une solution pensée pour vos métiers</h2>
+        <p style="color: var(--light-text); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">CarePulse a été spécifiquement conçu pour répondre aux besoins des professionnels de santé fonctionnant par forfaits de séances.</p>
+        <div class="spec-grid">
+            <div class="spec-tag"><i class="fa-solid fa-person-walking"></i> Kinésithérapie</div>
+            <div class="spec-tag"><i class="fa-solid fa-head-side-medical"></i> Orthophonie</div>
+            <div class="spec-tag"><i class="fa-solid fa-child-reaching"></i> Psychomotricité</div>
+            <div class="spec-tag"><i class="fa-solid fa-wheelchair"></i> Rééducation Fonctionnelle</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="showcase-grid">
+            <div class="showcase-item">
+                <div class="showcase-content">
+                    <h3>Marre du chaos administratif ?</h3>
+                    <p>La gestion manuelle de vos forfaits de séances vous fait perdre un temps précieux. Fini les rendez-vous oubliés, les calculs d'avances complexes et les dossiers désorganisés.</p>
+                    <p><strong>CarePulse centralise tout votre flux de travail</strong>, du premier rendez-vous jusqu'à la facture globale en fin de traitement.</p>
+                    <a href="#fonctionnalites" class="btn-primary" style="margin-top: 15px;">Découvrir comment</a>
+                </div>
+                <div class="showcase-img">
+                    <img src="img2.png" alt="Fini le chaos avec CarePulse">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fonctionnalites" class="section" style="background: white; border-radius: 60px; box-shadow: var(--shadow-sm); padding-top: 80px;">
+        <div class="section-header">
+            <h2>Tout pour votre centre</h2>
+            <p>Un écosystème d'outils puissants dédiés au suivi de vos patients.</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-layer-group"></i></div>
+                <h4>Facturation par Séances</h4>
+                <p>Sélectionnez les dates de rendez-vous depuis le calendrier et générez une facture groupée automatiquement avec calcul HT/TTC.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-wallet"></i></div>
+                <h4>Gestion des Avances</h4>
+                <p>Suivez les paiements anticipés (portefeuille patient) et déduisez-les en un seul clic lors de la facturation finale du traitement.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <h4>Rappels Automatiques</h4>
+                <p>Réduisez l'absentéisme avec des rappels de rendez-vous envoyés directement sur le mobile du patient via WhatsApp ou SMS.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4>Sécurité 100% Locale</h4>
+                <p>Vos données médicales restent physiquement sur votre appareil. Zéro cloud, pour une conformité totale au secret médical.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h4>Analyses de Rentabilité</h4>
+                <p>Visualisez vos revenus par type de prestation (Kiné, Orthophonie...) en temps réel avec des graphiques interactifs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                <h4>PDF Personnalisés</h4>
+                <p>Générez vos factures et rapports financiers en intégrant directement votre propre papier à en-tête professionnel.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="showcase-grid">
+            <div class="showcase-item reverse" style="background: transparent; border: none; box-shadow: none;">
+                <div class="showcase-content">
+                    <h3>Disponible sur Windows & Android</h3>
+                    <p>Que vous soyez à l'accueil sur le PC du cabinet ou en salle de soin avec votre tablette, CarePulse s'adapte à votre matériel.</p>
+                    <p>Un design <strong>Responsive et Fluide</strong> qui rend l'expérience utilisateur exceptionnelle sur tous les supports.</p>
+                    <a href="https://wa.me/212652084735" class="btn-primary" style="margin-top: 15px;"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Obtenir la solution</a>
+                </div>
+                <div class="showcase-img">
+                    <img src="img1.png" alt="CarePulse multiplateforme">
+                </div>
+            </div>
+            
+            <div class="showcase-item">
+                <div class="showcase-content">
+                    <h3>Des statistiques claires</h3>
+                    <p>Prenez des décisions éclairées grâce au tableau de bord. Suivez vos KPI essentiels : Chiffre d'affaires, panier moyen, et répartition des consultations.</p>
+                </div>
+                <div class="showcase-img">
+                    <img src="img3.png" alt="Statistiques CarePulse">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2><img src="icon.png" alt="Logo" onerror="this.style.display='none'"> CarePulse</h2>
+                <p>Édité par Sastouka Digital.<br>La solution logicielle premium qui fait la différence pour les professionnels de santé au Maroc.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Ressources</h4>
+                <ul>
+                    <li><a href="guide.html"><i class="fa-solid fa-book" style="width: 20px;"></i> Guide d'utilisation</a></li>
+                    <li><a href="https://wa.me/212652084735"><i class="fa-brands fa-whatsapp" style="width: 20px;"></i> Support Technique</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Légal & Sécurité</h4>
+                <ul>
+                    <li><a href="policy.html"><i class="fa-solid fa-user-shield" style="width: 20px;"></i> Politique (CNDP/RGPD)</a></li>
+                    <li><a href="cgu.html"><i class="fa-solid fa-scale-balanced" style="width: 20px;"></i> CGU</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            &copy; 2026 Sastouka Digital. Tous droits réservés.
+        </div>
+    </footer>
+
+</body>
+</html>
