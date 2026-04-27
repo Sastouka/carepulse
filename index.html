@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
+            /* Couleurs de base */
             --primary: #000080;
             --secondary: #0072FF;
             --accent: #00C6FF;
@@ -17,9 +18,24 @@
             --light-text: #64748b;
             --glass: rgba(255, 255, 255, 0.75);
             --border: rgba(255, 255, 255, 0.4);
+            
+            /* Ombres */
             --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 20px 40px -10px rgb(0 0 0 / 0.15);
             --shadow-glow: 0 10px 30px rgba(0, 114, 255, 0.3);
+
+            /* Nouvelles couleurs diversifiées pour les icônes */
+            --color-kine: #10b981; /* Emeraude */
+            --color-ortho: #8b5cf6; /* Violet */
+            --color-psycho: #f59e0b; /* Ambre */
+            --color-reeduc: #f43f5e; /* Rose */
+            
+            --icon-grad-1: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            --icon-grad-2: linear-gradient(135deg, #4E65FF, #92EFFD);
+            --icon-grad-3: linear-gradient(135deg, #11998E, #38EF7D);
+            --icon-grad-4: linear-gradient(135deg, #667EEA, #764BA2);
+            --icon-grad-5: linear-gradient(135deg, #F7971E, #FFD200);
+            --icon-grad-6: linear-gradient(135deg, #EC008C, #FC6767);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,6 +67,7 @@
             align-items: center;
             box-shadow: var(--shadow-sm);
             z-index: 1000;
+            transition: all 0.3s ease;
         }
         
         .nav-logo {
@@ -78,6 +95,7 @@
             text-decoration: none;
             display: inline-block;
             transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
@@ -93,6 +111,7 @@
             flex-direction: column;
             gap: 15px;
             z-index: 2000;
+            transition: transform 0.3s ease;
         }
 
         .fab-btn {
@@ -168,6 +187,13 @@
         }
         .hero-text p { font-size: 1.2rem; color: var(--light-text); margin-bottom: 35px; }
         
+        .hero-buttons {
+            display: flex; 
+            gap: 15px; 
+            flex-wrap: wrap; 
+            justify-content: flex-start;
+        }
+
         .hero-image img {
             width: 100%;
             border-radius: 32px;
@@ -200,16 +226,24 @@
         }
         .spec-tag {
             padding: 12px 25px;
-            background: var(--bg);
+            background: white;
             border-radius: 50px;
             font-weight: 700;
-            color: var(--primary);
-            border: 1px solid var(--secondary);
             display: flex;
             align-items: center;
             gap: 10px;
             box-shadow: var(--shadow-sm);
+            border: 2px solid transparent;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+        
+        /* Couleurs personnalisées pour les tags de spécialité */
+        .spec-tag.kine { color: var(--color-kine); border-color: var(--color-kine); background: rgba(16, 185, 129, 0.05); }
+        .spec-tag.ortho { color: var(--color-ortho); border-color: var(--color-ortho); background: rgba(139, 92, 246, 0.05); }
+        .spec-tag.psycho { color: var(--color-psycho); border-color: var(--color-psycho); background: rgba(245, 158, 11, 0.05); }
+        .spec-tag.reeduc { color: var(--color-reeduc); border-color: var(--color-reeduc); background: rgba(244, 63, 94, 0.05); }
+        
+        .spec-tag:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 
         /* Features */
         .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
@@ -232,17 +266,28 @@
             box-shadow: var(--shadow-sm);
         }
         .feature-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+        
         .feature-icon {
             width: 70px; height: 70px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-radius: 20px;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.8rem;
             margin: 0 auto 20px;
-            box-shadow: var(--shadow-glow);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s;
         }
-        .feature-card h4 { font-size: 1.4rem; color: var(--primary); margin-bottom: 15px; font-weight: 800; }
+        .feature-card:hover .feature-icon { transform: scale(1.1) rotate(5deg); }
+
+        /* Application des dégradés uniques aux icônes des fonctionnalités */
+        .feature-card:nth-child(1) .feature-icon { background: var(--icon-grad-1); box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3); }
+        .feature-card:nth-child(2) .feature-icon { background: var(--icon-grad-2); box-shadow: 0 10px 20px rgba(78, 101, 255, 0.3); }
+        .feature-card:nth-child(3) .feature-icon { background: var(--icon-grad-3); box-shadow: 0 10px 20px rgba(17, 153, 142, 0.3); }
+        .feature-card:nth-child(4) .feature-icon { background: var(--icon-grad-4); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        .feature-card:nth-child(5) .feature-icon { background: var(--icon-grad-5); box-shadow: 0 10px 20px rgba(247, 151, 30, 0.3); }
+        .feature-card:nth-child(6) .feature-icon { background: var(--icon-grad-6); box-shadow: 0 10px 20px rgba(236, 0, 140, 0.3); }
+
+        .feature-card h4 { font-size: 1.4rem; color: var(--text); margin-bottom: 15px; font-weight: 800; }
         .feature-card p { color: var(--light-text); font-size: 0.95rem; }
 
         /* Showcase */
@@ -281,13 +326,59 @@
         .footer-links ul li a:hover { color: var(--secondary); }
         .footer-bottom { text-align: center; padding-top: 30px; color: var(--light-text); font-size: 0.9rem; border-top: 1px solid #f1f5f9; margin-top: 40px;}
 
+        /* ==========================================================================
+           MEDIA QUERIES (RESPONSIVITÉ)
+           ========================================================================== */
+        
+        /* Tablettes et petits écrans d'ordinateurs */
         @media (max-width: 968px) {
-            .hero-container, .showcase-item, .showcase-item.reverse { grid-template-columns: 1fr; text-align: center; direction: ltr; }
-            .hero-text h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
+            nav {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 15px;
+                gap: 15px;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+            }
+            .nav-links a.btn-primary { width: 100%; margin-top: 10px; }
+            
+            .hero { padding: 220px 20px 60px; } /* Ajustement pour la barre de navigation plus haute */
+            .hero-container { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-buttons { justify-content: center; }
+            
+            .showcase-item, .showcase-item.reverse { grid-template-columns: 1fr; text-align: center; direction: ltr; }
+            
             .footer-content { grid-template-columns: 1fr; text-align: center; }
             .footer-brand h2 { justify-content: center; }
-            .fab-container { bottom: 20px; right: 20px; }
+            
+            .fab-container { bottom: 20px; right: 20px; transform: scale(0.9); transform-origin: bottom right; }
+        }
+
+        /* Smartphones (très petits écrans) */
+        @media (max-width: 576px) {
+            .hero-text h1 { font-size: 2.2rem; }
+            .hero-text p { font-size: 1rem; }
+            
+            .section-header h2 { font-size: 2rem; }
+            .section { padding: 60px 15px; }
+            
+            .features-grid { grid-template-columns: 1fr; }
+            .feature-card { padding: 30px 20px; }
+            
+            .specialization { padding: 40px 15px; margin: 0 10px; }
+            .spec-tag { width: 100%; justify-content: center; }
+            
+            .hero-buttons a { width: 100%; text-align: center; }
+            
+            .showcase-item { padding: 25px 15px; border-radius: 25px; }
+            .showcase-content h3 { font-size: 1.6rem; }
+            
+            .fab-container { transform: scale(0.8); bottom: 10px; right: 10px; }
         }
     </style>
 </head>
@@ -322,7 +413,7 @@
             <div class="hero-text">
                 <h1>L'excellence du suivi <span>par séances.</span></h1>
                 <p>La solution logicielle sur-mesure pour les centres de rééducation. Gérez vos patients, vos forfaits de séances et votre facturation avec une précision inégalée.</p>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">
+                <div class="hero-buttons">
                     <a href="https://wa.me/212652084735" class="btn-primary" style="font-size: 1.1rem; padding: 16px 35px;"><i class="fa-solid fa-rocket" style="margin-right: 8px;"></i> Démarrer maintenant</a>
                     <a href="guide.html" class="btn-primary" style="background: white; color: var(--primary) !important; border: 2px solid #e2e8f0; box-shadow: none;">Voir le guide</a>
                 </div>
@@ -337,10 +428,10 @@
         <h2>Une solution pensée pour vos métiers</h2>
         <p style="color: var(--light-text); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">CarePulse a été spécifiquement conçu pour répondre aux besoins des professionnels de santé fonctionnant par forfaits de séances.</p>
         <div class="spec-grid">
-            <div class="spec-tag"><i class="fa-solid fa-person-walking"></i> Kinésithérapie</div>
-            <div class="spec-tag"><i class="fa-solid fa-head-side-medical"></i> Orthophonie</div>
-            <div class="spec-tag"><i class="fa-solid fa-child-reaching"></i> Psychomotricité</div>
-            <div class="spec-tag"><i class="fa-solid fa-wheelchair"></i> Rééducation Fonctionnelle</div>
+            <div class="spec-tag kine"><i class="fa-solid fa-person-walking"></i> Kinésithérapie</div>
+            <div class="spec-tag ortho"><i class="fa-solid fa-head-side-medical"></i> Orthophonie</div>
+            <div class="spec-tag psycho"><i class="fa-solid fa-child-reaching"></i> Psychomotricité</div>
+            <div class="spec-tag reeduc"><i class="fa-solid fa-wheelchair"></i> Rééducation Fonctionnelle</div>
         </div>
     </section>
 
@@ -363,7 +454,7 @@
     <section id="fonctionnalites" class="section" style="background: white; border-radius: 60px; box-shadow: var(--shadow-sm); padding-top: 80px;">
         <div class="section-header">
             <h2>Tout pour votre centre</h2>
-            <p>Un écosystème d'outils puissants dédiés au suivi de vos patients.</p>
+            <p>Un écosystème d'outils puissants dédiés au suivi de vos patients avec un code couleur intuitif.</p>
         </div>
         
         <div class="features-grid">
